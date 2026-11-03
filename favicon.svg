@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 96 96" fill="none">
+      <defs>
+        <radialGradient id="ng" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00C4E0" stop-opacity="0.2"/><stop offset="100%" stop-color="#00C4E0" stop-opacity="0"/></radialGradient>
+        <linearGradient id="nl" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00C4E0"/><stop offset="100%" stop-color="#00D48A"/></linearGradient>
+      </defs>
+      <ellipse cx="48" cy="48" rx="44" ry="44" fill="url(#ng)"/>
+      <circle cx="48" cy="48" r="6" fill="#00C4E0" opacity="0.95"/>
+      <circle cx="48" cy="18" r="3.5" fill="#00C4E0" opacity="0.8"/>
+      <circle cx="48" cy="78" r="3.5" fill="#00C4E0" opacity="0.8"/>
+      <circle cx="18" cy="48" r="3.5" fill="#00C4E0" opacity="0.8"/>
+      <circle cx="78" cy="48" r="3.5" fill="#00C4E0" opacity="0.8"/>
+      <circle cx="27" cy="27" r="3" fill="#00D48A" opacity="0.75"/>
+      <circle cx="69" cy="27" r="3" fill="#00D48A" opacity="0.75"/>
+      <circle cx="27" cy="69" r="3" fill="#00D48A" opacity="0.6"/>
+      <circle cx="69" cy="69" r="3" fill="#00D48A" opacity="0.6"/>
+      <line x1="48" y1="42" x2="48" y2="22" stroke="url(#nl)" stroke-width="1.5" opacity="0.7"/>
+      <line x1="48" y1="54" x2="48" y2="74" stroke="url(#nl)" stroke-width="1.5" opacity="0.7"/>
+      <line x1="42" y1="48" x2="22" y2="48" stroke="url(#nl)" stroke-width="1.5" opacity="0.7"/>
+      <line x1="54" y1="48" x2="74" y2="48" stroke="url(#nl)" stroke-width="1.5" opacity="0.7"/>
+      <line x1="44" y1="44" x2="31" y2="31" stroke="#00D48A" stroke-width="1" opacity="0.5"/>
+      <line x1="52" y1="44" x2="65" y2="31" stroke="#00D48A" stroke-width="1" opacity="0.5"/>
+      <line x1="44" y1="52" x2="31" y2="65" stroke="#00D48A" stroke-width="1" opacity="0.4"/>
+      <line x1="52" y1="52" x2="65" y2="65" stroke="#00D48A" stroke-width="1" opacity="0.4"/>
+    </svg>
