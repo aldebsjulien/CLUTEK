@@ -1,0 +1,94 @@
+/* Shared styles for Clutek content pages (service + French pages). The homepage keeps its own inline styles. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#060A0F;--navy:#0A1628;--cyan:#00C4E0;--cyan2:#008FAA;--green:#00D48A;
+  --light:#F4F7FA;--light2:#E8EFF6;--muted:#5D6B82;--border:#D0DCE8;--white:#fff;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Archivo',Verdana,sans-serif;background:var(--light);color:var(--navy);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--cyan2)}
+img,svg{display:block}
+
+/* Header */
+.site-header{position:sticky;top:0;z-index:50;background:rgba(6,10,15,0.94);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07)}
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:1rem;padding-bottom:1rem}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-wm{font-weight:900;font-size:1.25rem;letter-spacing:-0.04em;text-transform:uppercase;color:#fff}
+.brand-wm span{color:var(--cyan)}
+.site-nav{display:flex;align-items:center;gap:1.75rem;list-style:none}
+.site-nav a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+.site-nav a:hover,.site-nav a[aria-current="page"]{color:#fff}
+.site-nav .lang{border:1.5px solid rgba(255,255,255,0.2);border-radius:4px;padding:0.3rem 0.7rem}
+.site-nav .cta{background:var(--cyan);color:#fff;padding:0.6rem 1.1rem;border-radius:4px}
+.site-nav .cta:hover{background:var(--cyan2)}
+@media(max-width:900px){.site-nav .hide-sm{display:none}}
+
+.wrap{max-width:1120px;margin:0 auto;padding-left:clamp(16px,4vw,3rem);padding-right:clamp(16px,4vw,3rem)}
+
+/* Hero */
+.page-hero{background:radial-gradient(ellipse at 80% 0%,rgba(0,196,224,0.18),transparent 60%),var(--dark);color:#fff;padding:clamp(4rem,9vw,7rem) 0 clamp(3.5rem,7vw,5.5rem)}
+.crumbs{font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:1.75rem}
+.crumbs a{color:rgba(255,255,255,0.7);text-decoration:none}
+.crumbs a:hover{color:var(--cyan)}
+.eyebrow{display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(0,196,224,0.4);background:rgba(0,196,224,0.1);border-radius:100px;padding:0.4rem 1rem;font-size:0.72rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.5rem}
+.eyebrow::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.page-hero h1{font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:900;line-height:1.02;letter-spacing:-0.035em;max-width:16ch}
+.page-hero h1 em{font-style:normal;color:var(--cyan)}
+.lead{font-size:clamp(1rem,1.6vw,1.15rem);color:rgba(255,255,255,0.72);max-width:62ch;margin-top:1.5rem}
+.actions{display:flex;flex-wrap:wrap;gap:0.85rem;margin-top:2.25rem}
+.btn{display:inline-block;text-decoration:none;font-weight:800;font-size:0.85rem;letter-spacing:0.05em;text-transform:uppercase;padding:1rem 1.6rem;border-radius:4px}
+.btn-primary{background:var(--cyan);color:#fff}
+.btn-primary:hover{background:var(--cyan2)}
+.btn-ghost{border:1.5px solid rgba(255,255,255,0.25);color:#fff}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.facts{display:flex;flex-wrap:wrap;gap:2.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08)}
+.facts div{font-size:0.8rem;color:rgba(255,255,255,0.55)}
+.facts strong{display:block;font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-0.02em}
+
+/* Content */
+.section{padding:clamp(3.5rem,7vw,5.5rem) 0}
+.section.alt{background:#fff}
+.section h2{font-size:clamp(1.6rem,3.2vw,2.4rem);font-weight:900;letter-spacing:-0.03em;line-height:1.1;margin-bottom:1.25rem;max-width:24ch}
+.section h3{font-size:1.1rem;font-weight:800;margin-bottom:0.5rem}
+.section p{color:var(--muted);max-width:70ch}
+.section p+p{margin-top:1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.25rem;margin-top:2rem}
+.card{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
+.section:not(.alt) .card{background:#fff}
+.card p{font-size:0.95rem}
+.card a{font-weight:700;text-decoration:none}
+.checks{list-style:none;margin-top:1.25rem;display:grid;gap:0.6rem;max-width:70ch}
+.checks li{position:relative;padding-left:1.6rem;color:var(--muted)}
+.checks li::before{content:'✦';position:absolute;left:0;color:var(--cyan)}
+.checks strong{color:var(--navy)}
+.steps{counter-reset:s;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:2rem}
+.steps li{counter-increment:s;border-top:2px solid var(--cyan);padding-top:1rem}
+.steps li::before{content:'0' counter(s);font-weight:900;color:var(--cyan);font-size:0.85rem;letter-spacing:0.1em}
+.steps h3{margin-top:0.35rem}
+.steps p{font-size:0.95rem}
+
+/* FAQ */
+.faq{max-width:860px;margin-top:1.5rem}
+.faq details{border-top:1px solid var(--border);padding:1.1rem 0}
+.faq details:last-child{border-bottom:1px solid var(--border)}
+.faq summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:1rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';color:var(--cyan);font-size:1.3rem;line-height:1}
+.faq details[open] summary::after{content:'–'}
+.faq p{margin-top:0.75rem}
+
+/* CTA band */
+.cta-band{background:linear-gradient(120deg,var(--navy),#0b2a3a);color:#fff;padding:clamp(3rem,6vw,4.5rem) 0}
+.cta-band .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+.cta-band h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:900;letter-spacing:-0.03em;line-height:1.15;max-width:22ch}
+.cta-band p{color:rgba(255,255,255,0.65);margin-top:0.5rem}
+
+/* Footer */
+.site-footer{background:var(--dark);color:rgba(255,255,255,0.55);padding:3rem 0 2rem;font-size:0.85rem}
+.foot-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:2rem}
+.site-footer h2{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#fff;margin-bottom:0.9rem;font-weight:800}
+.site-footer ul{list-style:none;display:grid;gap:0.5rem}
+.site-footer a{color:rgba(255,255,255,0.6);text-decoration:none}
+.site-footer a:hover{color:var(--cyan)}
+.foot-bottom{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem}
+@media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr}.foot-grid>div:first-child{grid-column:1/-1}}
