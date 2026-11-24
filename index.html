@@ -5476,6 +5476,44 @@ const pages = {
 let currentPage = 'home';
 let isAnimating = false;
 
+// Show one page instantly (no curtain) and keep nav + currentPage in sync.
+function applyPage(pageId) {
+  Object.values(pages).forEach(p => {
+    if (p) {
+      p.style.display = 'none';
+      p.style.opacity = '0';
+    }
+  });
+  // Always keep footer visible
+  const footer = document.querySelector('.footer-new');
+  if (footer) { footer.style.display = 'block'; footer.style.opacity = '1'; }
+  const sepEl = document.querySelector('.page-footer-sep');
+  if (sepEl) sepEl.style.display = pageId === 'contact' ? 'none' : 'block';
+
+  // Hide stats strip unless going home
+  const statsStrip = document.querySelector('.stats-strip');
+  if (statsStrip) statsStrip.style.display = pageId === 'home' ? (window.innerWidth <= 768 ? 'grid' : 'flex') : 'none';
+  const vpSection = document.querySelector('.vp-section');
+  if (vpSection) vpSection.style.display = pageId === 'home' ? 'grid' : 'none';
+  const heroBgLogo = document.querySelector('.hero-bg-logo');
+  if (heroBgLogo) heroBgLogo.style.display = (pageId === 'home' && window.innerWidth > 1440) ? 'flex' : 'none';
+
+  // Show target page
+  const target = pages[pageId];
+  if (target) {
+    target.style.display = 'block';
+    target.style.opacity = '1';
+    window.scrollTo(0, 0);
+  }
+
+  // Update nav active state
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
+  const activeLink = document.querySelector(`.nav-links a[onclick*="${pageId}"]`);
+  if (activeLink) activeLink.classList.add('nav-active');
+
+  currentPage = pageId;
+}
+
 function goTo(pageId) {
   if (isAnimating || pageId === currentPage) return;
   isAnimating = true;
@@ -5493,40 +5531,7 @@ function goTo(pageId) {
 
 
       // Step 2: Hide all sections, show target
-      Object.values(pages).forEach(p => {
-        if (p) {
-          p.style.display = 'none';
-          p.style.opacity = '0';
-        }
-      });
-      // Always keep footer visible
-      const footer = document.querySelector('.footer-new');
-      if (footer) { footer.style.display = 'block'; footer.style.opacity = '1'; }
-      const sepEl = document.querySelector('.page-footer-sep');
-      if (sepEl) sepEl.style.display = pageId === 'contact' ? 'none' : 'block';
-
-      // Hide stats strip unless going home
-      const statsStrip = document.querySelector('.stats-strip');
-      if (statsStrip) statsStrip.style.display = pageId === 'home' ? (window.innerWidth <= 768 ? 'grid' : 'flex') : 'none';
-      const vpSection = document.querySelector('.vp-section');
-      if (vpSection) vpSection.style.display = pageId === 'home' ? 'grid' : 'none';
-      const heroBgLogo = document.querySelector('.hero-bg-logo');
-      if (heroBgLogo) heroBgLogo.style.display = (pageId === 'home' && window.innerWidth > 1440) ? 'flex' : 'none';
-
-      // Show target page
-      const target = pages[pageId];
-      if (target) {
-        target.style.display = 'block';
-        target.style.opacity = '1';
-        window.scrollTo(0, 0);
-      }
-
-      // Update nav active state
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
-      const activeLink = document.querySelector(`.nav-links a[onclick*="${pageId}"]`);
-      if (activeLink) activeLink.classList.add('nav-active');
-
-      currentPage = pageId;
+      applyPage(pageId);
 
       // Step 3: Curtain sweeps UP to reveal new page
       gsap.set(curtain, { scaleY: 1, transformOrigin: 'top' });
@@ -5695,26 +5700,9 @@ function showThankYou() {
     if (count <= 0) {
       clearInterval(timer);
 
-      // Switch to home page silently (no curtain transition)
-      const pages = {
-        home: document.querySelector('.hero'),
-        services: document.querySelector('#services'),
-        industries: document.querySelector('#industries'),
-        process: document.querySelector('#process'),
-        why: document.querySelector('#why'),
-        contact: document.querySelector('#contact'),
-      };
-      const statsStrip = document.querySelector('.stats-strip');
-      // Hide all pages
-      Object.values(pages).forEach(p => { if(p){ p.style.display='none'; p.style.opacity='0'; } });
-      // Show home silently
-      if(pages.home){ pages.home.style.display='block'; pages.home.style.opacity='1'; }
-      if(statsStrip){ statsStrip.style.display='flex'; }
-      // Keep footer visible
-      const footer = document.querySelector('.footer-new');
-      if(footer){ footer.style.display='block'; footer.style.opacity='1'; }
-      // Scroll to top
-      window.scrollTo(0,0);
+      // Switch to home page silently (no curtain transition).
+      // applyPage also resets currentPage, so the Contact Us nav works again afterwards.
+      applyPage('home');
 
       // Now fade out the overlay smoothly
       overlay.style.transition = 'opacity 0.6s ease';
