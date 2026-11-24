@@ -5066,6 +5066,13 @@ nav.scrolled .hamburger span{background:#fff}
   <!-- Salesforce hidden fields -->
   <input type="hidden" name="oid" value="00Dau000007eZnp">
   <input type="hidden" name="retURL" value="about:blank">
+  <input type="hidden" name="lead_source" value="Web">
+
+  <!-- Spam honeypot: hidden from people, bots tend to fill it. Not a Salesforce field. -->
+  <div class="hp-field" aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+    <label for="hp_website">Leave this field empty</label>
+    <input id="hp_website" type="text" tabindex="-1" autocomplete="off">
+  </div>
 
   <div class="form-row">
     <div class="form-group">
@@ -5083,9 +5090,15 @@ nav.scrolled .hamburger span{background:#fff}
     <input id="email" maxlength="80" name="email" type="email" placeholder="john@company.com" data-ph-en="john@company.com" data-ph-fr="jean@entreprise.com" required>
   </div>
 
-  <div class="form-group">
-    <label for="company" data-en="Company" data-fr="Entreprise">Company</label>
-    <input id="company" maxlength="40" name="company" type="text" placeholder="Acme Corp" data-ph-en="Acme Corp" data-ph-fr="Acme Corp">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="company" data-en="Company" data-fr="Entreprise">Company</label>
+      <input id="company" maxlength="40" name="company" type="text" placeholder="Acme Corp" data-ph-en="Acme Corp" data-ph-fr="Acme Corp">
+    </div>
+    <div class="form-group">
+      <label for="phone" data-en="Phone (optional)" data-fr="Téléphone (facultatif)">Phone (optional)</label>
+      <input id="phone" maxlength="40" name="phone" type="tel" placeholder="514 555-0123" data-ph-en="514 555-0123" data-ph-fr="514 555-0123">
+    </div>
   </div>
 
   <div class="form-group">
@@ -5097,9 +5110,10 @@ nav.scrolled .hamburger span{background:#fff}
     <span data-en="Send message →" data-fr="Envoyer le message →">Send message →</span>
   </button>
 
-  <p class="form-privacy" data-en="Your information is sent directly and securely to our Salesforce CRM." data-fr="Vos informations sont envoyées directement et en toute sécurité à notre CRM Salesforce.">Your information is sent directly and securely to our Salesforce CRM.</p>
+  <p class="form-privacy" data-en="Your information is sent directly and securely to our CRM." data-fr="Vos informations sont envoyées directement et en toute sécurité à notre CRM.">Your information is sent directly and securely to our CRM.</p>
 
 </form>
+<script>window.__formLoadedAt = Date.now();</script>
       </div>
     </div>
   </div>
@@ -5589,10 +5603,57 @@ function hideToast() {
   document.getElementById('toast').classList.remove('show');
 }
 
+// Clutek CRM Web-to-Lead form ("Contact Us"). Every submission is also sent here,
+// in addition to the Salesforce Web-to-Lead POST.
+var CRM_WEB_TO_LEAD_URL = 'https://crm-one-tan-23.vercel.app/api/web-to-lead/a215a230893149a78d0363a89d12c978';
+
+function sendLeadToCrm(form) {
+  const v = name => (form.elements[name] && form.elements[name].value || '').trim();
+  const lead = {
+    first_name: v('first_name'),
+    last_name: v('last_name'),
+    email: v('email'),
+    company: v('company') || '[not provided]',
+    phone: v('phone'),
+    description: v('description'),
+    _elapsed: String(Date.now() - (window.__formLoadedAt || 0)),
+  };
+  if (!lead.phone) delete lead.phone;
+  const post = body => fetch(CRM_WEB_TO_LEAD_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    keepalive: true,
+  }).then(r => r.json().catch(() => ({})).then(j => ({ status: r.status, ...j })));
+  post(lead).then(res => {
+    // The CRM rejects phone numbers it can't parse; keep the lead and move the number into the message.
+    if (!res.ok && lead.phone && /phone/i.test(res.message || '')) {
+      const { phone, ...rest } = lead;
+      rest.description = (rest.description ? rest.description + '\n\n' : '') + 'Phone: ' + phone;
+      return post(rest);
+    }
+    return res;
+  }).then(res => {
+    if (!res.ok) console.warn('CRM web-to-lead failed:', res.message || res.status);
+  }).catch(err => console.warn('CRM web-to-lead failed:', err));
+}
+
 function handleFormSubmit(e) {
   // Do NOT prevent default — let the form POST naturally into the sf_target iframe
   // The form already has target="sf_target" set in HTML, so main page never navigates
   const form = document.getElementById('contactForm');
+  // Spam check: bots fill the hidden honeypot or submit within seconds of page load.
+  // Silently drop those (show the thank-you so bots get no signal).
+  const hp = document.getElementById('hp_website');
+  const tooFast = (Date.now() - (window.__formLoadedAt || 0)) < 3000;
+  if ((hp && hp.value) || tooFast) {
+    e.preventDefault();
+    showThankYou();
+    setTimeout(() => form.reset(), 100);
+    return;
+  }
+  // Also create the lead in the Clutek CRM (Salesforce still gets the normal form POST).
+  sendLeadToCrm(form);
   // Show thank you overlay
   showThankYou();
   // Reset form after short delay to let submit fire first
