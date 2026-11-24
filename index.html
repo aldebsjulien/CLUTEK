@@ -5097,7 +5097,7 @@ nav.scrolled .hamburger span{background:#fff}
     </div>
     <div class="form-group">
       <label for="phone" data-en="Phone (optional)" data-fr="Téléphone (facultatif)">Phone (optional)</label>
-      <input id="phone" maxlength="40" name="phone" type="tel" placeholder="514 555-0123" data-ph-en="514 555-0123" data-ph-fr="514 555-0123">
+      <input id="phone" maxlength="40" name="phone" type="tel" inputmode="tel" autocomplete="tel" pattern="[0-9+()\-. ]*" placeholder="514 555-0123" data-ph-en="514 555-0123" data-ph-fr="514 555-0123">
     </div>
   </div>
 
@@ -5113,7 +5113,27 @@ nav.scrolled .hamburger span{background:#fff}
   <p class="form-privacy" data-en="Your information is sent directly and securely to our CRM." data-fr="Vos informations sont envoyées directement et en toute sécurité à notre CRM.">Your information is sent directly and securely to our CRM.</p>
 
 </form>
-<script>window.__formLoadedAt = Date.now();</script>
+<script>
+window.__formLoadedAt = Date.now();
+// Phone is optional, but if filled it must look like a real number:
+// only digits, spaces, + ( ) - . and 7 to 15 digits (e.g. 514 555-0123, +1 (514) 555-0123).
+(function () {
+  var phone = document.getElementById('phone');
+  if (!phone) return;
+  function check() {
+    var v = phone.value.trim();
+    var digits = v.replace(/\D/g, '').length;
+    var ok = !v || (/^[0-9+()\-. ]+$/.test(v) && digits >= 7 && digits <= 15);
+    var fr = (typeof currentLang !== 'undefined' && currentLang === 'fr');
+    phone.setCustomValidity(ok ? '' : (fr
+      ? 'Entrez un numéro de téléphone valide, par ex. 514 555-0123.'
+      : 'Enter a valid phone number, e.g. 514 555-0123.'));
+  }
+  phone.addEventListener('input', check);
+  phone.addEventListener('blur', check);
+  check();
+})();
+</script>
       </div>
     </div>
   </div>
